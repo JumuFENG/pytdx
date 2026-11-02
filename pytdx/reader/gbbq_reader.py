@@ -2,7 +2,7 @@
 
 import struct
 from ctypes import *
-import pandas as pd
+from pytdx.util.pandas_adapter import DataFrame
 import sys
 
 
@@ -77,11 +77,11 @@ class GbbqReader(object):
                 data_offset += 5
 
 
-        df = pd.DataFrame(data=result, columns=['market', 'code', 'datetime', 'category',
-                                                  'hongli_panqianliutong',
-                                                  'peigujia_qianzongguben',
-                                                  'songgu_qianzongguben',
-                                                  'peigu_houzongguben'])
+        df = DataFrame(data=result, columns=['market', 'code', 'datetime', 'category',
+                                                 'hongli_panqianliutong',
+                                                 'peigujia_qianzongguben',
+                                                 'songgu_qianzongguben',
+                                                 'peigu_houzongguben'])
         return df
 
 

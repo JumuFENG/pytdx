@@ -7,7 +7,7 @@ import tempfile
 import random
 import os
 import six
-import pandas as pd
+from pytdx.util.pandas_adapter import DataFrame, set_option
 
 if six.PY2:
     import zipfile
@@ -161,20 +161,18 @@ class HistoryFinancialCrawler(BaseCralwer):
         for i in range(0, length):
             col.append("col" + str(i + 1))
 
-
-        df =  pd.DataFrame(data=data, columns=col)
+        df =  DataFrame(data=data, columns=col)
         # df.to_csv("./a.csv",index=False)
         df.set_index('code', inplace=True)
         return df
 
 
 if __name__ == '__main__':
-    import pandas as pd
     from pytdx.crawler.base_crawler import demo_reporthook
     crawler = HistoryFinancialListCrawler()
     #
     list_data = crawler.fetch_and_parse(reporthook=demo_reporthook)
-    df = pd.DataFrame(data=list_data)
+    df = DataFrame(data=list_data)
 
     print(df["filename"])
     print(df["filename"].str.contains("gpcw20190630.zip").any())
@@ -186,8 +184,8 @@ if __name__ == '__main__':
     filename = list_data[1]['filename']
     filesize = list_data[1]["filesize"]
     
-    datacrawler = HistoryFinancialCrawler()
-    pd.set_option('display.max_columns', None)
+    # datacrawler = HistoryFinancialCrawler()
+    # pd.set_option('display.max_columns', None)
 
     # result = datacrawler.fetch_and_parse(reporthook=demo_reporthook, filename=filename, filesize=filesize, path_to_download="./tmpfile.zip")
     # print(result)

@@ -19,7 +19,7 @@ except ImportError:
     log = lambda x:None
 
 try:
-    import pandas as pd
+    from pytdx.util.pandas_adapter import DataFrame
 except ImportError as e:
     pass
 
@@ -126,7 +126,7 @@ class TdxTradeApi(object):
     def data_to_df(self, result):
         if 'data' in result:
             data = result['data']
-            return pd.DataFrame(data=data)
+            return DataFrame(data=data)
 
     #------ functions
 

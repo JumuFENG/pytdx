@@ -1,11 +1,11 @@
 #coding=utf-8
 from __future__ import unicode_literals, division
 
-import pandas as pd
 import os
 
 from pytdx.reader.base_reader import TdxFileNotFoundException, TdxNotAssignVipdocPathException
 from pytdx.reader.base_reader import BaseReader
+from pytdx.util.pandas_adapter import DataFrame, to_datetime
 from collections import OrderedDict
 
 """
@@ -59,8 +59,8 @@ class TdxLCMinBarReader(BaseReader):
         data = self.parse_data_by_file(code_or_file)
         #else:
         #    data = [self._df_convert(row) for row in self.get_kline_by_code(code_or_file, exchange)]
-        df = pd.DataFrame(data=data)
-        df.index = pd.to_datetime(df.date)
+        df = DataFrame(data=data)
+        df.index = to_datetime(df.date)
         return df[['open', 'high', 'low', 'close', 'amount', 'volume']]
 
     def _parse_date(self, num):

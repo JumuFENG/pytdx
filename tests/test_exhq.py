@@ -3,7 +3,7 @@
 import pytest
 from pytdx.errors import TdxFunctionCallError, TdxConnectionError
 from collections import OrderedDict
-import pandas as pd
+from pytdx.util.pandas_adapter import DataFrame as pd
 import socket
 from pytdx.exhq import TdxExHq_API, TDXParams
 

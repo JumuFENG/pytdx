@@ -8,7 +8,7 @@
 import os
 import socket
 import sys
-import pandas as pd
+from pytdx.util.pandas_adapter import DataFrame
 
 if __name__ == '__main__':
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))

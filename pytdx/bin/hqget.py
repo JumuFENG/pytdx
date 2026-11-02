@@ -14,14 +14,14 @@ if __name__ == '__main__':
 from pytdx.hq import TdxHq_API
 from pytdx.params import TDXParams
 from pytdx.config.hosts import hq_hosts
-import pandas as pd
+from pytdx.util.pandas_adapter import DataFrame, set_option
 import pickle
 from functools import reduce
 
 
-# 让pandas 显示全部数据
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
+# 让DataFrame 显示全部数据
+set_option('display.max_columns', None)
+set_option('display.max_rows', None)
 
 mtstr = os.getenv("TDX_MT", "")
 mt = False
@@ -217,7 +217,7 @@ def main(function, df, output, server, all):
 
         if (result is not None) and (output != "-"):
             click.secho("写入结果到 " + output)
-            if isinstance(result, pd.DataFrame):
+            if isinstance(result, DataFrame):
                 result.to_csv(output)
             else:
                 with open(output, "wb") as f:

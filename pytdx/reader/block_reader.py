@@ -2,7 +2,7 @@
 import struct
 from pytdx.reader.base_reader import BaseReader
 from collections import OrderedDict
-import pandas as pd
+from pytdx.util.pandas_adapter import DataFrame
 import os
 from io import BytesIO
 
@@ -18,7 +18,7 @@ class BlockReader(BaseReader):
 
     def get_df(self, fname, result_type=BlockReader_TYPE_FLAT):
         result = self.get_data(fname, result_type)
-        return pd.DataFrame(result)
+        return DataFrame(result)
 
     def get_data(self, fname, result_type=BlockReader_TYPE_FLAT):
 
@@ -81,7 +81,7 @@ class CustomerBlockReader(BaseReader):
 
     def get_df(self, fname, result_type=BlockReader_TYPE_FLAT):
         result = self.get_data(fname, result_type)
-        return pd.DataFrame(result)
+        return DataFrame(result)
 
     def get_data(self, fname, result_type=BlockReader_TYPE_FLAT):
 
@@ -114,7 +114,7 @@ class CustomerBlockReader(BaseReader):
             codes = open(bf).read().splitlines()
             if result_type == BlockReader_TYPE_FLAT:
                 for index,code in enumerate(codes):
-                    if code is not '':
+                    if code:
                         result.append(
                             OrderedDict([
                                 ("blockname",n1),
@@ -125,7 +125,7 @@ class CustomerBlockReader(BaseReader):
                         )
 
             if result_type == BlockReader_TYPE_GROUP:
-                cc = [c[1:] for c in codes if c is not '']
+                cc = [c[1:] for c in codes if c]
                 result.append(
                     OrderedDict([
                         ("blockname",n1),

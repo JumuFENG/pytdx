@@ -2,7 +2,7 @@
 
 from collections import OrderedDict
 
-import pandas as pd
+from pytdx.util.pandas_adapter import DataFrame as pd
 import pytest
 from pytdx.errors import TdxConnectionError, TdxFunctionCallError
 from pytdx.hq import TdxHq_API, TDXParams

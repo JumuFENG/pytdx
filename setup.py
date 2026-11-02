@@ -21,8 +21,8 @@ else:
     cythonkw = {}
 try:
     import pypandoc
-    long_description = pypandoc.convert('README.md', 'rst')
-except (IOError, ImportError):
+    long_description = pypandoc.convert_file('README.md', 'rst')
+except (IOError, ImportError, AttributeError):
     print(30 * "*")
     print("Notice, NEED TO INSTALL *pypandoc* TO get full description of package")
     print(30 * "*")
@@ -53,7 +53,7 @@ print(30 * '-')
 
 setup(
     name=pkg_name,
-    version='1.72',
+    version='1.74',
     description='A Python Interface to TDX protocol',
     long_description=long_description,
     author=['RainX<Jing Xu>', 'yutiansut'],
@@ -62,10 +62,13 @@ setup(
     packages=find_packages(),
     install_requires=[
             'click',
-            'pandas',
             'six',
             'cryptography',
     ],
+    extras_require={
+        'pandas': ['pandas>=1.0.0'],
+        'excel': ['openpyxl'],
+    },
     entry_points={
         'console_scripts': [
             'hqget=pytdx.bin.hqget:main',

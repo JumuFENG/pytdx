@@ -1,5 +1,5 @@
 import pytest
-import pandas as pd
+from pytdx.util.pandas_adapter import DataFrame as pd
 from pytdx.crawler.base_crawler import demo_reporthook
 from pytdx.crawler.history_financial_crawler import HistoryFinancialListCrawler
 

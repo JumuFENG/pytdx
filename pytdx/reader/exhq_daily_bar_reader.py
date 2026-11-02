@@ -1,8 +1,8 @@
     #coding=utf-8
 from __future__ import unicode_literals, division
 
-import pandas as pd
 import os
+from pytdx.util.pandas_adapter import DataFrame, to_datetime
 
 import struct
 from pytdx.reader.base_reader import TdxFileNotFoundException, TdxNotAssignVipdocPathException
@@ -36,8 +36,8 @@ class TdxExHqDailyBarReader(BaseReader):
         # 只传入了一个参数
         data = [self._df_convert(row) for row in self.parse_data_by_file(code_or_file)]
 
-        df = pd.DataFrame(data=data, columns=('date', 'open', 'high', 'low', 'close', 'amount', 'volume','jiesuan', 'hk_stock_amount'))
-        df.index = pd.to_datetime(df.date)
+        df = DataFrame(data=data, columns=('date', 'open', 'high', 'low', 'close', 'amount', 'volume','jiesuan', 'hk_stock_amount'))
+        df.index = to_datetime(df.date)
         return df[['open', 'high', 'low', 'close', 'amount', 'volume','jiesuan', 'hk_stock_amount']]
 
     def _df_convert(self, row):

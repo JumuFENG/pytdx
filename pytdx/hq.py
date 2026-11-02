@@ -12,7 +12,7 @@ import socket
 import sys
 import threading
 
-import pandas as pd
+from pytdx.util.pandas_adapter import DataFrame, concat
 from pytdx.base_socket_client import BaseSocketClient, update_last_ack_time
 from pytdx.heartbeat import HqHeartBeatThread
 from pytdx.log import DEBUG, log
@@ -34,7 +34,7 @@ from pytdx.parser.get_transaction_data import GetTransactionData
 from pytdx.parser.get_xdxr_info import GetXdXrInfo
 from pytdx.parser.get_report_file import GetReportFile
 from pytdx.parser.setup_commands import SetupCmd1, SetupCmd2, SetupCmd3
-from pytdx.util import get_real_trade_date, trade_date_sse
+
 try:
     # Python 3
     from collections.abc import Iterable
@@ -220,12 +220,24 @@ class TdxHq_API(BaseSocketClient):
         # https://github.com/rainx/pytdx/issues/33
         # 0 - 深圳， 1 - 上海
 
-        data = pd.concat([self.to_df(self.get_security_bars(9, __select_market_code(
-            code), code, (9 - i) * 800, 800)) for i in range(10)], axis=0)
+        data_list = [self.to_df(self.get_security_bars(9, __select_market_code(
+            code), code, (9 - i) * 800, 800)) for i in range(10)]
+        data = concat(data_list)
 
-        data = data.assign(date=data['datetime'].apply(lambda x: str(x)[0:10])).assign(code=str(code))\
-            .set_index('date', drop=False, inplace=False)\
-            .drop(['year', 'month', 'day', 'hour', 'minute', 'datetime'], axis=1)[start_date:end_date]
+        # 分步处理链式操作
+        data = data.assign(date=data['datetime'].apply(lambda x: str(x)[0:10]))
+        data = data.assign(code=str(code))
+        data = data.drop(['year', 'month', 'day', 'hour', 'minute', 'datetime'], axis=1)
+        
+        # 简单的日期过滤（基于字符串比较）
+        if start_date or end_date:
+            filtered_data = []
+            for row in data.data:
+                row_date = row.get('date', '')
+                if (not start_date or row_date >= start_date) and (not end_date or row_date <= end_date):
+                    filtered_data.append(row)
+            data = DataFrame(data=filtered_data)
+        
         return data.assign(date=data['date'].apply(lambda x: str(x)[0:10]))
 
 

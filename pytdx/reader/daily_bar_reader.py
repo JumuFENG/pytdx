@@ -1,8 +1,8 @@
 #coding=utf-8
 from __future__ import unicode_literals, division
 
-import pandas as pd
 import os
+from pytdx.util.pandas_adapter import DataFrame, to_datetime
 
 #import struct
 from pytdx.reader.base_reader import TdxFileNotFoundException, TdxNotAssignVipdocPathException
@@ -64,8 +64,8 @@ class TdxDailyBarReader(BaseReader):
         coefficient = self.SECURITY_COEFFICIENT[security_type]
         data = [self._df_convert(row, coefficient) for row in self.parse_data_by_file(fname)]
 
-        df = pd.DataFrame(data=data, columns=('date', 'open', 'high', 'low', 'close', 'amount', 'volume'))
-        df.index = pd.to_datetime(df.date)
+        df = DataFrame(data=data, columns=('date', 'open', 'high', 'low', 'close', 'amount', 'volume'))
+        df.index = to_datetime(df.date)
         return df[['open', 'high', 'low', 'close', 'amount', 'volume']]
 
     def get_df_by_code(self, code, exchange):

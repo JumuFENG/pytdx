@@ -14,11 +14,11 @@ from pytdx.reader import GbbqReader
 from pytdx.reader import BlockReader
 from pytdx.reader import CustomerBlockReader
 from pytdx.reader.history_financial_reader import HistoryFinancialReader
-import pandas as pd
+from pytdx.util.pandas_adapter import set_option
 
-# 让pandas 显示全部数据
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
+# 让DataFrame 显示全部数据
+set_option('display.max_columns', None)
+set_option('display.max_rows', None)
 
 
 Help_Text = '''

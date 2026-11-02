@@ -8,7 +8,7 @@
 import os
 import socket
 import sys
-import pandas as pd
+from pytdx.util.pandas_adapter import DataFrame
 
 if __name__ == '__main__':
     sys.path.insert(0, os.path.dirname(
@@ -266,8 +266,8 @@ class BaseSocketClient(object):
 
     def to_df(self, v):
         if isinstance(v, list):
-            return pd.DataFrame(data=v)
+            return DataFrame(data=v)
         elif isinstance(v, dict):
-            return pd.DataFrame(data=[v, ])
+            return DataFrame(data=[v, ])
         else:
-            return pd.DataFrame(data=[{'value': v}])
+            return DataFrame(data=[{'value': v}])
